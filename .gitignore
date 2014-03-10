@@ -1,0 +1,12 @@
+# Mac stuff
+.DS_Store
+
+# Emacs stuff
+*~
+
+# Python stuff
+*.pyc
+*.egg
+
+* Python Virtualenv stuff
+*/venv
