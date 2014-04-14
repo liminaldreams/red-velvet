@@ -1,0 +1,3 @@
+MongoHQ database
+user: admin
+password: mongoDB
