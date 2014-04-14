@@ -1,0 +1,15 @@
+{
+    "name": "RedVelvetServer",
+    "version": "0.0.0",
+    "description": "Red Velvet backend",
+    "dependencies": {
+        "socket.io": "latest",
+        "express": "latest",
+        "ejs": "latest",
+        "mongodb": "latest",
+        "mongoose": "latest",
+        "express-resource": "latest",
+        "body-parser": "latest"
+    },
+    "author": "VerUltimus"
+}
