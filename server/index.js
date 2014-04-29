@@ -25,7 +25,7 @@ db.once('open', function () {
 });
 
 app.get('/', function(req, res) {
-    res.send("<h1>Hello World!</h>");
+    res.send("<h1>Hello GoogleJumpers!</h>");
 });
 
 app.resource('chromeext', require('./chromeext/api'));
