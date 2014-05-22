@@ -9,13 +9,14 @@
 	"description": "This extension is a prototype.",
 	"version": "1.0",
 
- //   "permissions": {
-	//    "alarms"
-	// },
+   "permissions": [
+   	    "tabs",
+	    "alarms"
+	],
 	
 	"browser_action": {
 		"default_icon": "test.jpg",
-		"popup": "popup.html"
+		"default_popup": "popup.html"
 	}
 
 	

@@ -6,16 +6,24 @@
 //  periodInMinutes: 1,
 // });
 
-console.logCopy = console.log.bind(console);
+// console.logCopy = console.log.bind(console);
 
-console.log = function(data) {
-	var timestamp = '[' + Date.now() + ']';
-	this.logCopy(timestamp, data);
-};
+// console.log = function(data) {
+// 	var timestamp = '[' + Date.now() + ']';
+// 	this.logCopy(timestamp, data);
+// };
 
-console.log(timestamp);
+// console.log(timestamp);
 
+chrome.tabs.getSelected(null, function(tab) {
+    document.getElementById('currentLink').innerHTML = tab.url;
+    //myFunction(tab.url);
+});
 
+// function myFunction(tablink) {
+//   // do stuff here
+//   console.log(tablink);
+// }
 
 // create object with alarmInfo? then call it in chrome.alarms.create("run", object.periodInMinutes);
 // set it so .js file runs every minute for now
