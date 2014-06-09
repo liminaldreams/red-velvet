@@ -11,7 +11,8 @@
 
    "permissions": [
    	    "tabs",
-	    "alarms"
+	    "alarms",
+	    "http://red-velvet-proto.herokuapp.com/chromeext"
 	],
 	
 	"browser_action": {
