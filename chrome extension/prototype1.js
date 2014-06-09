@@ -7,11 +7,20 @@ var xml = new XMLHttpRequest();
 // 	activeInfo.tabId
 // })
 
-chrome.tabs.onUpdated.addListener(function(null, null, tab) {
+chrome.tabs.onCreated.addListener(function(tab) {
 	xml.open("POST", tab.url, true);
 	var time = Date.now();
 	var t = time.toString();
 	xml.send(t);
+})
+
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+	if (tab.url != changeInfo.url) {
+		xml.open("POST", changeInfo.url, true);
+		var time = Date.now();
+		var t = time.toString();
+		xml.send(t);
+	}
 })
 
 // test for popup, use Date.now() for UNIX time
