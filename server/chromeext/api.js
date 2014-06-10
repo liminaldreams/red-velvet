@@ -2,11 +2,14 @@ var mongoose = require('mongoose');
 var ChromeModel = require('./model');
 
 exports.index = function(req, res){
-    res.send('forum index');
+    ChromeModel.find(function(err,docs) {
+        if (err) console.error(err);
+        res.send(docs);
+    });
 };
 
 exports.new = function(req, res){
-    res.send('new forum');
+    res.send('Direct browser creation of data is not supported.');
 };
 
 exports.create = function(req, res){
@@ -30,15 +33,23 @@ exports.show = function(req, res){
 };
 
 exports.edit = function(req, res){
-    res.send('edit forum ' + req.forum.title);
+    res.send('Direct browser editing of data is not supported.');
 };
 
 exports.update = function(req, res){
-    res.send('update forum ' + req.forum.title);
+    res.send('Update is not supported');
 };
 
 exports.destroy = function(req, res){
-    res.send('destroy forum ' + req.forum.title);
+    ChromeModel.findOne({
+        url: req.params.chromeext
+    }, function (err, chr) {
+        if (err) return console.error(err);
+        chr.remove(function(err,c) {
+            if (err) return console.error(err);
+        });
+        res.send(chr);
+    });
 };
 
 exports.load = function(id, fn){
