@@ -1,8 +1,11 @@
 // array of IDs; even indices are tab.tabId, odd indices are server IDs
 // store in memory current session tabId - IDs that server will be sending back
-var idArray = [];
+var ids = [];
 
 var currentID;
+
+// create xmlhttprequest
+var xml = new XMLHttpRequest();
 
 
 // use tab events: onCreated, onActivated, ...etc.
@@ -10,8 +13,11 @@ var currentID;
 // when the active tab in a window changes
 chrome.tabs.onActivated.addListener(function(activeInfo){
 	// post end_time of previous currentID then update currentID
+	
+
 	// create new post to database
-	activeInfo.tabId
+	ids[ids.length] = activeInfo.tabId;
+	// need to get tab url from server?
 })
 
 // when a new tab is created
@@ -25,9 +31,14 @@ chrome.tabs.onCreated.addListener(function(tab) {
 
 
 	// xml.open("POST", tab.url, true);
-	// var time = Date.now();
-	// var t = time.toString();
-	// xml.send(t);
+	// xmlhttp.setRequestHeader("Content-type", "application/json");
+	// xmlhttp.onreadystatechange = function () { //Call a function when the state changes.
+	//     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	//         alert(xmlhttp.responseText);
+	//     }
+	// }
+	// var parameters = JSON.stringify(data);
+	// xml.send(parameters);
 })
 
 // when a tab is updated
@@ -49,7 +60,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 
 // when a tab is closed
 chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
-	// find ID corresponding to tabID in idArray, update end_time
+	// find ID corresponding to tabID in ids, update end_time
 
 })
 
