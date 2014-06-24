@@ -8,7 +8,7 @@ var DATABASES = {
     local: 'mongodb://localhost/red-velvet',
     heroku: 'mongodb://admin:mongoDB@oceanic.mongohq.com:10043/app24111546'
 }
-var db_url = DATABASES.local;
+var db_url = DATABASES.heroku;
 
 var app = express();
 var port = Number(process.env.PORT || 5000);;
