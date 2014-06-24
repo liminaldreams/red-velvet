@@ -16,17 +16,19 @@ exports.create = function(req, res){
     var chr = new ChromeModel(req.body);
     chr.save(function (err,chr) {
         if (err) return console.error(err);
-        console.log("ChromeModel saved. URL: " + chr.url + "\n");
-        res.send("ChromeModel saved. URL: " + chr.url + "\n");
+        res.send(chr);
     });
 };
 
 exports.show = function(req, res){
     // Is there a way to change the name to "url"?
     ChromeModel.findOne({
-        url: req.params.chromeext
+        _id: req.params.chromeext
     }, function (err,chr) {
-        if (err) return console.error(err);
+        if (err) {
+            res.send(err);
+            return console.error(err);
+        }
         console.log("ChromeModel retrieved.\n" + chr + "\n");
         res.send(chr);
     });
@@ -37,7 +39,20 @@ exports.edit = function(req, res){
 };
 
 exports.update = function(req, res){
-    res.send('Update is not supported');
+    ChromeModel.findOne({
+        _id: req.params.chromeext
+    }, function (err,chr) {
+        if (req.body.end_time)
+            chr.end_time = req.body.end_time;
+        chr.save(function (err,chr) {
+            if (err) {
+                res.send(err);
+                return console.error(err);
+            }
+            console.log("ChromeModel updated.\n" + chr + "\n");
+            res.send(chr);
+        });
+    });
 };
 
 exports.destroy = function(req, res){
