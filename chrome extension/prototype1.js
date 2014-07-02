@@ -31,12 +31,12 @@ chrome.tabs.onCreated.addListener(function(tab) {
 	ids[ids.length] = tab.id;
 
 	xml.open("POST", "http://red-velvet-proto.herokuapp.com/chromeext", true);
-	xmlhttp.setRequestHeader("Content-type", "application/json");
-	xmlhttp.onreadystatechange = function () { //Call a function when the state changes.
-	    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	xml.setRequestHeader("Content-type", "application/json");
+	xml.onreadystatechange = function () { //Call a function when the state changes.
+	    if (xml.readyState == 4 && xml.status == 200) {
 	    	alert(xml.responseText);
 	    	document.getElementById('currentLink').innerText = tab.id;
-	        ids[ids.length] = xmlhttp.responseText;
+	        ids[ids.length] = xml.responseText;
 	    }
 	}
 	var parameters = JSON.stringify(data);

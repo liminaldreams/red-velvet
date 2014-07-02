@@ -1,6 +1,6 @@
 {
 	"background": {
-	  "scripts": ["prototype2.js"]
+	  "scripts": ["prototype1.js"]
 	},
 
 	"manifest_version": 2,
