@@ -26,14 +26,16 @@ chrome.tabs.onCreated.addListener(function(tab) {
 	var data = {
 		"url" : tab.url,
 		"start_time" : Date.now(),
-		"end_time" :
+		"end_time" : 0
 	};
 	ids[ids.length] = tab.id;
 
-	xml.open("POST", tab.url, true);
+	xml.open("POST", "http://red-velvet-proto.herokuapp.com/chromeext", true);
 	xmlhttp.setRequestHeader("Content-type", "application/json");
 	xmlhttp.onreadystatechange = function () { //Call a function when the state changes.
 	    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	    	alert(xml.responseText);
+	    	document.getElementById('currentLink').innerText = tab.id;
 	        ids[ids.length] = xmlhttp.responseText;
 	    }
 	}
@@ -65,11 +67,29 @@ chrome.tabs.onCreated.addListener(function(tab) {
 // })
 
 
-// test for popup, use Date.now() for UNIX time
-chrome.tabs.getSelected(null, function(tab) {
-    document.getElementById('currentLink').innerHTML = tab.url;
-});
 
+//test for popup, use Date.now() for UNIX time
+// chrome.tabs.getSelected(null, function(tab) {
+//     document.getElementById('currentLink').innerHTML = tab.url;
+//     document.getElementById('currentLink').innerHTML += " ";
+//     document.getElementById('currentLink').innerHTML += Date.now();
+// });
+
+
+//test for GET on selecting tab
+chrome.tabs.getSelected(null, function(tab) {
+	// create xmlhttprequest
+	var xml = new XMLHttpRequest();
+
+	xml.open("GET", "http://red-velvet-proto.herokuapp.com/chromeext", true);
+	xmlhttp.onreadystatechange = function () { //Call a function when the state changes.
+	    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	    	alert(xml.responseText);
+	    	//document.getElementById('currentLink').innerText = tab.id;
+	    }
+	}
+	xml.send();
+});
 
 
 // send info to server - http://red-velvet-proto.herokuapp.com/chromeext

@@ -1,6 +1,6 @@
 {
 	"background": {
-	  "scripts": ["prototype1.js"]
+	  "scripts": ["prototype2.js"]
 	},
 
 	"manifest_version": 2,
@@ -12,7 +12,7 @@
    "permissions": [
    	    "tabs",
 	    "alarms",
-	    "http://red-velvet-proto.herokuapp.com/chromeext"
+	    "http://red-velvet-proto.herokuapp.com/"
 	],
 	
 	"browser_action": {
