@@ -9,7 +9,9 @@
         "mongodb": "latest",
         "mongoose": "latest",
         "express-resource": "latest",
-        "body-parser": "latest"
+        "body-parser": "latest",
+        "passport": "latest",
+        "passport-http": "latest"
     },
     "author": "VerUltimus"
 }

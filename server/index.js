@@ -3,12 +3,13 @@ var Resource = require('express-resource');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var ChromeExt = require('./chromeext/model');
+var Authentication = require('./authentication');
 
 var DATABASES = {
     local: 'mongodb://localhost/red-velvet',
     heroku: 'mongodb://admin:mongoDB@oceanic.mongohq.com:10043/app24111546'
 }
-var db_url = DATABASES.heroku;
+var db_url = DATABASES.local;
 
 var app = express();
 var port = Number(process.env.PORT || 5000);;
@@ -29,5 +30,8 @@ app.get('/', function(req, res) {
 });
 
 app.resource('chromeext', require('./chromeext/api'));
+
+// Passport Setup
+Authentication.init(app);
 
 app.listen(port);

@@ -82,8 +82,8 @@ chrome.tabs.getSelected(null, function(tab) {
 	var xml = new XMLHttpRequest();
 
 	xml.open("GET", "http://red-velvet-proto.herokuapp.com/chromeext", true);
-	xmlhttp.onreadystatechange = function () { //Call a function when the state changes.
-	    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	xml.onreadystatechange = function () { //Call a function when the state changes.
+	    if (xml.readyState == 4 && xml.status == 200) {
 	    	alert(xml.responseText);
 	    	//document.getElementById('currentLink').innerText = tab.id;
 	    }
