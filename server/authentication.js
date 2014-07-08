@@ -1,4 +1,6 @@
-var passport = require('passport');
+var passport = require('passport'),
+    BasicStrategy = require('passport-http').BasicStrategy;
+var User = require('./users/model')
 
 module.exports = {
 
@@ -11,14 +13,14 @@ module.exports = {
           if (!user) {
             return done(null, false, { message: 'Incorrect username.' });
           }
-          if (!user.validPassword(password)) {
+          if (user.password != password) {
             return done(null, false, { message: 'Incorrect password.' });
           }
           return done(null, user);
         });
       }
     ));
-    app.post('/login', passport.authenticate('local'));
+    app.post('/login', passport.authenticate('basic', { session: false }));
   }
 
 }

@@ -34,7 +34,7 @@ chrome.tabs.onCreated.addListener(function(tab) {
 	xml.setRequestHeader("Content-type", "application/json");
 	xml.onreadystatechange = function () { //Call a function when the state changes.
 	    if (xml.readyState == 4 && xml.status == 200) {
-	    	alert(xml.responseText);
+	    	console.log(xml.responseText);
 	    	document.getElementById('currentLink').innerText = tab.id;
 	        ids[ids.length] = xml.responseText;
 	    }
@@ -84,7 +84,7 @@ chrome.tabs.getSelected(null, function(tab) {
 	xml.open("GET", "http://red-velvet-proto.herokuapp.com/chromeext", true);
 	xml.onreadystatechange = function () { //Call a function when the state changes.
 	    if (xml.readyState == 4 && xml.status == 200) {
-	    	alert(xml.responseText);
+	    	console.log(xml.responseText);
 	    	//document.getElementById('currentLink').innerText = tab.id;
 	    }
 	}
