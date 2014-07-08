@@ -2,6 +2,7 @@
 // store in memory current session tabId - IDs that server will be sending back
 var ids = {};
 
+// id of current tab
 var currentID;
 
 // create xmlhttprequest
@@ -11,14 +12,48 @@ var xml = new XMLHttpRequest();
 // use tab events: onCreated, onActivated, ...etc.
 
 // when the active tab in a window changes
-// chrome.tabs.onActivated.addListener(function(activeInfo){
-// 	// post end_time of previous currentID then update currentID
-	
+chrome.tabs.onActivated.addListener(function(activeInfo){
+	// post end_time of previous currentID
+	var oldData = {
+		"end_time" : Date.now()
+	};
 
-// 	// create new post to database
-// 	ids[ids.length] = activeInfo.tabId;
-// 	// need to get tab url from server?
-// })
+	var db = "http://red-velvet-proto.herokuapp.com/chromeext/" + ids[currentID];
+	xml.open("PUT", db, true);
+	xml.setRequestHeader("Content-type", "application/json");
+	xml.onreadystatechange = function () { //Call a function when the state changes.
+	    if (xml.readyState == 4 && xml.status == 200) {
+	    	console.log(db);
+	    	delete ids[tabId];
+	    }
+	}
+	var sendOld = JSON.stringify(oldData);
+	xml.send(sendOld);
+
+	// create new post to database and update currentID
+	chrome.tabs.get(activeInfo.tabId, function(tab) {
+		var data = {
+			"url" : tab.url,
+			"start_time" : Date.now(),
+			"end_time" : 0
+		};
+    	currentID = tab.id;
+
+    	xml.open("POST", "http://red-velvet-proto.herokuapp.com/chromeext", true);
+		xml.setRequestHeader("Content-type", "application/json");
+		xml.onreadystatechange = function () { //Call a function when the state changes.
+		    if (xml.readyState == 4 && xml.status == 200) {
+		    	console.log(xml.responseText);
+		    	var response = xml.responseText;
+		    	var parsed = JSON.parse(response);
+		        ids[activeInfo.tabId] = parsed._id;
+				currentID = activeInfo.tabId;
+		    }
+		}
+		var parameters = JSON.stringify(data);
+		xml.send(parameters);
+  	});
+});
 
 // when a new tab is created
 chrome.tabs.onCreated.addListener(function(tab) {
@@ -39,12 +74,12 @@ chrome.tabs.onCreated.addListener(function(tab) {
 	    	//console.log(parsed._id);
 	    	ids[tab.id] = parsed._id;
 	    	console.log(ids[tab.id]);
-	        //ids[ids.length] = xml.responseText;
+	        currentID = tab.id;
 	    }
 	}
 	var parameters = JSON.stringify(data);
 	xml.send(parameters);
-})
+});
 
 // when a tab is updated
 // chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
@@ -76,7 +111,7 @@ chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
 	xml.onreadystatechange = function () { //Call a function when the state changes.
 	    if (xml.readyState == 4 && xml.status == 200) {
 	    	console.log(db);
-	    	//delete ids[tabId];
+	    	delete ids[tabId];
 	    }
 	}
 	var parameters = JSON.stringify(data);
