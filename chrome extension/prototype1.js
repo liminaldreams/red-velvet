@@ -1,6 +1,6 @@
 // array of IDs; even indices are tab.tabId, odd indices are server IDs
 // store in memory current session tabId - IDs that server will be sending back
-var ids = [];
+var ids = {};
 
 var currentID;
 
@@ -28,15 +28,18 @@ chrome.tabs.onCreated.addListener(function(tab) {
 		"start_time" : Date.now(),
 		"end_time" : 0
 	};
-	ids[ids.length] = tab.id;
 
 	xml.open("POST", "http://red-velvet-proto.herokuapp.com/chromeext", true);
 	xml.setRequestHeader("Content-type", "application/json");
 	xml.onreadystatechange = function () { //Call a function when the state changes.
 	    if (xml.readyState == 4 && xml.status == 200) {
 	    	console.log(xml.responseText);
-	    	document.getElementById('currentLink').innerText = tab.id;
-	        ids[ids.length] = xml.responseText;
+	    	var response = xml.responseText;
+	    	var parsed = JSON.parse(response);
+	    	//console.log(parsed._id);
+	    	ids[tab.id] = parsed._id;
+	    	console.log(ids[tab.id]);
+	        //ids[ids.length] = xml.responseText;
 	    }
 	}
 	var parameters = JSON.stringify(data);
@@ -61,10 +64,24 @@ chrome.tabs.onCreated.addListener(function(tab) {
 // })
 
 // when a tab is closed
-// chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
-// 	// find ID corresponding to tabID in ids, update end_time
+chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
+	// find ID corresponding to tabID in ids, update end_time
+	var data = {
+		"end_time" : Date.now()
+	};
 
-// })
+	var db = "http://red-velvet-proto.herokuapp.com/chromeext/" + ids[tabId];
+	xml.open("PUT", db, true);
+	xml.setRequestHeader("Content-type", "application/json");
+	xml.onreadystatechange = function () { //Call a function when the state changes.
+	    if (xml.readyState == 4 && xml.status == 200) {
+	    	console.log(db);
+	    	//delete ids[tabId];
+	    }
+	}
+	var parameters = JSON.stringify(data);
+	xml.send(parameters);
+});
 
 
 
@@ -77,6 +94,7 @@ chrome.tabs.onCreated.addListener(function(tab) {
 
 
 //test for GET on selecting tab
+<<<<<<< HEAD
 chrome.tabs.getSelected(null, function(tab) {
 	// create xmlhttprequest
 	var xml = new XMLHttpRequest();
@@ -90,6 +108,21 @@ chrome.tabs.getSelected(null, function(tab) {
 	}
 	xml.send();
 });
+=======
+// chrome.tabs.getSelected(null, function(tab) {
+// 	// create xmlhttprequest
+// 	var xml = new XMLHttpRequest();
+
+// 	xml.open("GET", "http://red-velvet-proto.herokuapp.com/chromeext", true);
+// 	xml.onreadystatechange = function () { //Call a function when the state changes.
+// 	    if (xml.readyState == 4 && xml.status == 200) {
+// 	    	alert(ids[ids.length]);
+// 	    	//document.getElementById('currentLink').innerText = tab.id;
+// 	    }
+// 	}
+// 	xml.send();
+// });
+>>>>>>> e2e13df9b9152ed29bc25949bc5bb5cfc99b8bcc
 
 
 // send info to server - http://red-velvet-proto.herokuapp.com/chromeext
