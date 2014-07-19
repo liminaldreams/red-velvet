@@ -133,12 +133,6 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 	}
 });
 
-// onUpdated is fired constantly...how would i get it so that it only updates
-// the server if the tab has completed loading?
-// -> use changeInfo.status == 'complete'?
-// also, should i add this listener to onCreated? so it gets the final url
-// and not the inbetween urls?
-
 // when a tab is closed
 chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
 	// find ID corresponding to tabID in ids, update end_time
@@ -170,21 +164,6 @@ chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
 
 
 //test for GET on selecting tab
-<<<<<<< HEAD
-chrome.tabs.getSelected(null, function(tab) {
-	// create xmlhttprequest
-	var xml = new XMLHttpRequest();
-
-	xml.open("GET", "http://red-velvet-proto.herokuapp.com/chromeext", true);
-	xml.onreadystatechange = function () { //Call a function when the state changes.
-	    if (xml.readyState == 4 && xml.status == 200) {
-	    	console.log(xml.responseText);
-	    	//document.getElementById('currentLink').innerText = tab.id;
-	    }
-	}
-	xml.send();
-});
-=======
 // chrome.tabs.getSelected(null, function(tab) {
 // 	// create xmlhttprequest
 // 	var xml = new XMLHttpRequest();
@@ -198,7 +177,6 @@ chrome.tabs.getSelected(null, function(tab) {
 // 	}
 // 	xml.send();
 // });
->>>>>>> e2e13df9b9152ed29bc25949bc5bb5cfc99b8bcc
 
 
 // send info to server - http://red-velvet-proto.herokuapp.com/chromeext
