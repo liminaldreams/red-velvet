@@ -14,6 +14,7 @@ var xml = new XMLHttpRequest();
 // when the active tab in a window changes
 chrome.tabs.onActivated.addListener(function(activeInfo){
 	// post end_time of previous currentID
+	console.log("fired!");
 	var oldData = {
 		"end_time" : Date.now()
 	};
@@ -24,7 +25,7 @@ chrome.tabs.onActivated.addListener(function(activeInfo){
 	xml.onreadystatechange = function () { //Call a function when the state changes.
 	    if (xml.readyState == 4 && xml.status == 200) {
 	    	console.log(db);
-	    	delete ids[tabId];
+	    	delete ids[currentID];
 	    }
 	}
 	var sendOld = JSON.stringify(oldData);
@@ -56,34 +57,34 @@ chrome.tabs.onActivated.addListener(function(activeInfo){
 });
 
 // when a new tab is created
-chrome.tabs.onCreated.addListener(function(tab) {
-	chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-		if (changeInfo.status == "complete") {
-			// create new post to database
-			var data = {
-				"url" : tab.url,
-				"start_time" : Date.now(),
-				"end_time" : 0
-			};
+// chrome.tabs.onCreated.addListener(function(tab) {
+// 	chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+// 		if (changeInfo.status == "complete") {
+// 			// create new post to database
+// 			var data = {
+// 				"url" : tab.url,
+// 				"start_time" : Date.now(),
+// 				"end_time" : 0
+// 			};
 
-			xml.open("POST", "http://red-velvet-proto.herokuapp.com/chromeext", true);
-			xml.setRequestHeader("Content-type", "application/json");
-			xml.onreadystatechange = function () { //Call a function when the state changes.
-			    if (xml.readyState == 4 && xml.status == 200) {
-			    	console.log(xml.responseText);
-			    	var response = xml.responseText;
-			    	var parsed = JSON.parse(response);
-			    	//console.log(parsed._id);
-			    	ids[tab.id] = parsed._id;
-			    	console.log(ids[tab.id]);
-			        currentID = tab.id;
-			    }
-			}
-			var parameters = JSON.stringify(data);
-			xml.send(parameters);
-		}
-	})
-});
+// 			xml.open("POST", "http://red-velvet-proto.herokuapp.com/chromeext", true);
+// 			xml.setRequestHeader("Content-type", "application/json");
+// 			xml.onreadystatechange = function () { //Call a function when the state changes.
+// 			    if (xml.readyState == 4 && xml.status == 200) {
+// 			    	console.log(xml.responseText);
+// 			    	var response = xml.responseText;
+// 			    	var parsed = JSON.parse(response);
+// 			    	//console.log(parsed._id);
+// 			    	ids[tab.id] = parsed._id;
+// 			    	console.log(ids[tab.id]);
+// 			        currentID = tab.id;
+// 			    }
+// 			}
+// 			var parameters = JSON.stringify(data);
+// 			xml.send(parameters);
+// 		}
+// 	})
+// });
 
 // created tab isn't the active tab. have to fix that!
 
@@ -103,7 +104,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 	xml.onreadystatechange = function () { //Call a function when the state changes.
 	    if (xml.readyState == 4 && xml.status == 200) {
 	    	console.log(db);
-	    	delete ids[tabId];
+	    	delete ids[currentID];
 	    }
 	}
 	var sendOld = JSON.stringify(oldData);
@@ -151,6 +152,31 @@ chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
 	}
 	var parameters = JSON.stringify(data);
 	xml.send(parameters);
+});
+
+// check when all windows are minimized
+chrome.windows.onFocusChanged.addListener(function(windowId) {
+	if (windowId == -1) {
+		// Assume minimized
+		// post end_time of previous currentID
+		var oldData = {
+			"end_time" : Date.now()
+		};
+
+		var db = "http://red-velvet-proto.herokuapp.com/chromeext/" + ids[currentID];
+		xml.open("PUT", db, true);
+		xml.setRequestHeader("Content-type", "application/json");
+		xml.onreadystatechange = function () { //Call a function when the state changes.
+		    if (xml.readyState == 4 && xml.status == 200) {
+		    	console.log(db);
+		    	delete ids[currentID];
+		    }
+		}
+		var sendOld = JSON.stringify(oldData);
+		xml.send(sendOld);
+
+		currentID = null;
+	}
 });
 
 
