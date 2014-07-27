@@ -16,6 +16,7 @@ exports.create = function(req, res){
     var chr = new ChromeModel(req.body);
     chr.save(function (err,chr) {
         if (err) return console.error(err);
+        res.set('Access-Control-Allow-Origin', '*');
         res.send(chr);
     });
 };
@@ -46,6 +47,7 @@ exports.update = function(req, res){
             chr.end_time = req.body.end_time;
         chr.save(function (err,chr) {
             if (err) {
+                res.set('Access-Control-Allow-Origin', '*');
                 res.send(err);
                 return console.error(err);
             }
@@ -63,12 +65,13 @@ exports.destroy = function(req, res){
         chr.remove(function(err,c) {
             if (err) return console.error(err);
         });
+        res.set('Access-Control-Allow-Origin', '*');
         res.send(chr);
     });
 };
 
-exports.load = function(id, fn){
-    process.nextTick(function(){
-        fn(null, { title: 'Ferrets' });
-    });
-};
+// exports.load = function(id, fn){
+//     process.nextTick(function(){
+//         fn(null, { title: 'Ferrets' });
+//     });
+// };

@@ -3,7 +3,7 @@ var Resource = require('express-resource');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var ChromeExt = require('./chromeext/model');
-var Authentication = require('./authentication');
+// var Authentication = require('./authentication');
 
 var DATABASES = {
     local: 'mongodb://localhost/red-velvet',
@@ -31,7 +31,7 @@ app.get('/', function(req, res) {
 
 app.resource('chromeext', require('./chromeext/api'));
 
-// Passport Setup
-Authentication.init(app);
+// Passport Setup, TODO to be worked on later.
+// Authentication.init(app);
 
 app.listen(port);
