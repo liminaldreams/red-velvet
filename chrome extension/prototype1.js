@@ -8,6 +8,9 @@ var currentID;
 // create xmlhttprequest
 var xml = new XMLHttpRequest();
 
+// 0 = windows open. 1 = all windows minimized
+var closed = 0;
+
 
 // use tab events: onCreated, onActivated, ...etc.
 
@@ -176,6 +179,34 @@ chrome.windows.onFocusChanged.addListener(function(windowId) {
 		xml.send(sendOld);
 
 		currentID = null;
+		closed = 1;
+	}
+
+	// reopen window after minimizing all
+	if (windowId != -1 && closed == 1) {
+		chrome.tabs.query({active: true, currentWindow: true}, function(array) {
+			// only one tab should be active in the current window
+			var activeTab = array[0];
+			var data = {
+				"url" : activeTab.url,
+				"start_time" : Date.now(),
+				"end_time" : 0
+			};
+
+			xml.open("POST", "http://red-velvet-proto.herokuapp.com/chromeext", true);
+			xml.setRequestHeader("Content-type", "application/json");
+			xml.onreadystatechange = function () { //Call a function when the state changes.
+			    if (xml.readyState == 4 && xml.status == 200) {
+			    	console.log(xml.responseText);
+			    	var response = xml.responseText;
+			    	var parsed = JSON.parse(response);
+			        ids[activeTab.tabId] = parsed._id;
+					currentID = activeTab.tabId;
+			    }
+			}
+			var parameters = JSON.stringify(data);
+			xml.send(parameters);
+		})
 	}
 });
 
