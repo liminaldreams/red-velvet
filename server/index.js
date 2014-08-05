@@ -30,7 +30,7 @@ app.get('/', function(req, res) {
     res.send("<h1>Hello GoogleJumpers!</h1>");
 });
 app.resource('chromeext', require('./chromeext/api'));
-app.get('/chromeext/average/:url', function(req, res) {
+app.get('/chromeext/average', function(req, res) {
     res.send({ 'total_time': Analysis.average(req.param('url'))});
 })
 
