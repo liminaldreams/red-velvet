@@ -115,7 +115,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 	if (changeInfo.status == "complete") {
 		delete ids[currentID];
 		var data = {
-			"url" : tab.url,
+			"url" : trimUrl(tab.url),
 			"start_time" : Date.now(),
 			"end_time" : 0
 		};
@@ -189,7 +189,7 @@ chrome.windows.onFocusChanged.addListener(function(windowId) {
 			// only one tab should be active in the current window
 			var activeTab = array[0];
 			var data = {
-				"url" : activeTab.url,
+				"url" : trimUrl(activeTab.url),
 				"start_time" : Date.now(),
 				"end_time" : 0
 			};
@@ -215,6 +215,11 @@ chrome.windows.onFocusChanged.addListener(function(windowId) {
 });
 
 
+// Returns the domain name only
+function trimUrl(url) {
+	// Assuming all URLs are valid
+	return url.split("//")[1].split("/")[0];
+}
 
 //test for popup, use Date.now() for UNIX time
 // chrome.tabs.getSelected(null, function(tab) {

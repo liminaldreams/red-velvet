@@ -43,8 +43,6 @@ exports.edit = function(req, res){
 };
 
 exports.update = function(req, res){
-    console.log(req);
-    console.log(req.body);
     if (req.body.end_time) {
         ChromeModel.findOneAndUpdate({
             _id: req.params.chromeext
