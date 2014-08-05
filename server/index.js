@@ -13,7 +13,9 @@ var DATABASES = {
 var db_url = DATABASES.heroku;
 
 var app = express();
-var port = Number(process.env.PORT || 5000);;
+var port = Number(process.env.PORT || 5000);
+app.settings['view engine'] = 'ejs';
+app.settings.views = process.cwd() + '/server/static/html'
 
 // Express Setup
 app.use(bodyParser.json());      // JSON parser
@@ -27,11 +29,18 @@ db.once('open', function () {
 });
 
 app.get('/', function(req, res) {
-    res.send("<h1>Hello GoogleJumpers!</h1>");
+    res.render('tabletest', function(err, html) {
+        if (err) {
+            console.log(err);
+            res.send(500, err);
+        } else {
+            res.send(html);
+        }
+    });
 });
 app.resource('chromeext', require('./chromeext/api'));
 app.get('/chromeext/average', function(req, res) {
-    res.send({ 'total_time': Analysis.average(req.param('url'))});
+    res.send({ 'total_time': Analysis.average(req.query.url)});
 })
 
 // Passport Setup, TODO to be worked on later.

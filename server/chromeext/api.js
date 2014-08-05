@@ -29,7 +29,7 @@ exports.show = function(req, res){
         _id: req.params.chromeext
     }, function (err,chr) {
         if (err) {
-            res.send(err);
+            res.send(500, err);
             return console.error(err);
         }
         console.log("ChromeModel retrieved.\n" + chr + "\n");
@@ -57,7 +57,7 @@ exports.update = function(req, res){
     } else {
         err = "ChromeModel.update: No end_time parameter found"
         console.log(err);
-        res.send(err);
+        res.send(500, err);
     }
 };
 

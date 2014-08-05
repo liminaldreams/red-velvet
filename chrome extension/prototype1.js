@@ -11,6 +11,7 @@ var xml = new XMLHttpRequest();
 // 0 = windows open. 1 = all windows minimized
 var closed = 0;
 
+var allowedSchemes = ['http', 'https'];
 
 // use tab events: onCreated, onActivated, ...etc.
 
@@ -18,6 +19,7 @@ var closed = 0;
 chrome.tabs.onActivated.addListener(function(activeInfo){
 	// post end_time of previous currentID
 	console.log("fired!");
+
 	var oldData = {
 		"end_time" : Date.now()
 	};
@@ -36,8 +38,11 @@ chrome.tabs.onActivated.addListener(function(activeInfo){
 
 	// create new post to database and update currentID
 	chrome.tabs.get(activeInfo.tabId, function(tab) {
+		// Don't do anything if the involved tab's url does not have the right scheme.
+		if (!hasAllowedScheme(tab.url, allowedSchemes)) return;
+
 		var data = {
-			"url" : tab.url,
+			"url" : trimUrl(tab.url),
 			"start_time" : Date.now(),
 			"end_time" : 0
 		};
@@ -94,6 +99,9 @@ chrome.tabs.onActivated.addListener(function(activeInfo){
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 	// if url changes, post end_time of previous currentID then update currentID
 	// create new post to database
+
+	// Don't do anything if the involved tab's url does not have the right scheme.
+	if (!hasAllowedScheme(tab.url, allowedSchemes)) return;
 
 	// post end_time of previous currentID
 	var oldData = {
@@ -219,6 +227,17 @@ chrome.windows.onFocusChanged.addListener(function(windowId) {
 function trimUrl(url) {
 	// Assuming all URLs are valid
 	return url.split("//")[1].split("/")[0];
+}
+
+// Checks whether the given url has one of the given schemes.
+// url: The url that needs to be checked
+// schemes: Allowed schemes, e.g. ['http', 'https']
+function hasAllowedScheme(url, schemes) {
+	s = url.split('://')[0].toLowerCase();
+	for (var i = 0; i < schemes.length; i++)
+		if (s == schemes[i])
+			return true;
+	return false;
 }
 
 //test for popup, use Date.now() for UNIX time
