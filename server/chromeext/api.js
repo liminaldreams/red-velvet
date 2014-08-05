@@ -3,7 +3,7 @@ var ChromeModel = require('./model');
 
 exports.index = function(req, res){
     ChromeModel.find(function(err,docs) {
-        if (err) console.error(err);
+        if (err) return console.error(err);
         res.send(docs);
     });
 };
