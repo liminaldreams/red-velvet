@@ -28,7 +28,7 @@ chrome.tabs.onActivated.addListener(function(activeInfo){
 	xml.onreadystatechange = function () { //Call a function when the state changes.
 	    if (xml.readyState == 4 && xml.status == 200) {
 	    	console.log(db);
-	    	delete ids[currentID];
+	    	//delete ids[currentID];
 	    }
 	}
 	var sendOld = JSON.stringify(oldData);
@@ -41,7 +41,6 @@ chrome.tabs.onActivated.addListener(function(activeInfo){
 			"start_time" : Date.now(),
 			"end_time" : 0
 		};
-    	//currentID = tab.id;
 
     	xml.open("POST", "http://red-velvet-proto.herokuapp.com/chromeext", true);
 		xml.setRequestHeader("Content-type", "application/json");
@@ -50,8 +49,8 @@ chrome.tabs.onActivated.addListener(function(activeInfo){
 		    	console.log(xml.responseText);
 		    	var response = xml.responseText;
 		    	var parsed = JSON.parse(response);
-		        ids[activeInfo.tabId] = parsed._id;
-				currentID = activeInfo.tabId;
+		        ids[currentID] = parsed._id;
+				//currentID = activeInfo.tabId;
 		    }
 		}
 		var parameters = JSON.stringify(data);
@@ -106,8 +105,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 	xml.setRequestHeader("Content-type", "application/json");
 	xml.onreadystatechange = function () { //Call a function when the state changes.
 	    if (xml.readyState == 4 && xml.status == 200) {
-	    	console.log(db);
-	    	delete ids[currentID];
+	    	//console.log(db);
 	    }
 	}
 	var sendOld = JSON.stringify(oldData);
@@ -115,6 +113,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 	
 	// create new post to database and update currentID
 	if (changeInfo.status == "complete") {
+		delete ids[currentID];
 		var data = {
 			"url" : tab.url,
 			"start_time" : Date.now(),
@@ -128,8 +127,8 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 		    	console.log(xml.responseText);
 		    	var response = xml.responseText;
 		    	var parsed = JSON.parse(response);
-		        ids[tab.tabId] = parsed._id;
-				currentID = tab.tabId;
+		        ids[tab.id] = parsed._id;
+				currentID = tab.id;
 		    }
 		}
 		var parameters = JSON.stringify(data);
