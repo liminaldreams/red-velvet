@@ -32,16 +32,19 @@ app.get('/', function(req, res) {
     res.render('tabletest', function(err, html) {
         if (err) {
             console.log(err);
-            res.send(500, err);
+            res.status(500).send(err);
         } else {
             res.send(html);
         }
     });
 });
-app.resource('chromeext', require('./chromeext/api'));
 app.get('/chromeext/average', function(req, res) {
     res.send({ 'total_time': Analysis.average(req.query.url)});
-})
+});
+app.get('/chromeext/count', function(req, res) {
+    res.send(Analysis.count());
+});
+app.resource('chromeext', require('./chromeext/api'));
 
 // Passport Setup, TODO to be worked on later.
 // Authentication.init(app);

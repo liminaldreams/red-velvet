@@ -1,6 +1,6 @@
 var ChromeModel = require('./model');
 
-function average(url) {
+exports.average = function(url) {
     var total = 0;
     ChromeModel.find({
         url: { $regex: '^'+url }
@@ -18,4 +18,19 @@ function average(url) {
         }, 0);
     });
     return total;
+}
+
+exports.count = function() {
+    var c = {};
+    ChromeModel.find(true, function(err, res) {
+        console.log(res);
+        res.forEach(function(doc) {
+            if (c[doc.url])
+                c[doc.url]++;
+            else
+                c[doc.url] = 1;
+        });
+        console.log(c);
+    });
+    return c;
 }
