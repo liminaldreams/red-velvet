@@ -11,14 +11,6 @@
 
    "permissions": [
    	    "tabs",
-	    "alarms",
 	    "http://red-velvet-proto.herokuapp.com/"
-	],
-	
-	"browser_action": {
-		"default_icon": "test.jpg",
-		"default_popup": "popup.html"
-	}
-
-	
+	]
 }
