@@ -9,7 +9,7 @@ var currentID;
 var xml = new XMLHttpRequest();
 
 // 0 = windows open. 1 = all windows minimized
-var closed = 0;
+//var closed = 0;
 
 var allowedSchemes = ['http', 'https'];
 
@@ -191,35 +191,35 @@ chrome.windows.onFocusChanged.addListener(function(windowId) {
 	}
 
 	// reopen window after minimizing all
-	if (closed == 1) {
-		console.log("outside func");
-		chrome.tabs.query({active: true, currentWindow: true}, function(array) {
-			// only one tab should be active in the current window
-			var activeTab = array[0];
-			var data = {
-				"url" : trimUrl(activeTab.url),
-				"start_time" : Date.now(),
-				"end_time" : 0
-			};
-			console.log("hi");
-			console.log(active);
+	// if (closed == 1) {
+	// 	console.log("outside func");
+	// 	chrome.tabs.query({active: true, currentWindow: true}, function(array) {
+	// 		// only one tab should be active in the current window
+	// 		var activeTab = array[0];
+	// 		var data = {
+	// 			"url" : trimUrl(activeTab.url),
+	// 			"start_time" : Date.now(),
+	// 			"end_time" : 0
+	// 		};
+	// 		console.log("hi");
+	// 		console.log(active);
 
-			xml.open("POST", "http://red-velvet-proto.herokuapp.com/chromeext", true);
-			xml.setRequestHeader("Content-type", "application/json");
-			xml.onreadystatechange = function () { //Call a function when the state changes.
-			    if (xml.readyState == 4 && xml.status == 200) {
-			    	console.log(xml.responseText);
-			    	var response = xml.responseText;
-			    	var parsed = JSON.parse(response);
-			        ids[activeTab.tabId] = parsed._id;
-					currentID = activeTab.tabId;
-			    }
-			}
-			var parameters = JSON.stringify(data);
-			xml.send(parameters);
-			closed = 0;
-		})
-	}
+	// 		xml.open("POST", "http://red-velvet-proto.herokuapp.com/chromeext", true);
+	// 		xml.setRequestHeader("Content-type", "application/json");
+	// 		xml.onreadystatechange = function () { //Call a function when the state changes.
+	// 		    if (xml.readyState == 4 && xml.status == 200) {
+	// 		    	console.log(xml.responseText);
+	// 		    	var response = xml.responseText;
+	// 		    	var parsed = JSON.parse(response);
+	// 		        ids[activeTab.tabId] = parsed._id;
+	// 				currentID = activeTab.tabId;
+	// 		    }
+	// 		}
+	// 		var parameters = JSON.stringify(data);
+	// 		xml.send(parameters);
+	// 		closed = 0;
+	// 	})
+	// }
 });
 
 
