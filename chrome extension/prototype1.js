@@ -180,10 +180,12 @@ chrome.windows.onFocusChanged.addListener(function(windowId) {
 
 		currentID = null;
 		closed = 1;
+		console.log(closed);
 	}
 
 	// reopen window after minimizing all
-	if (windowId != -1 && closed == 1) {
+	if (closed == 1) {
+		console.log("outside func");
 		chrome.tabs.query({active: true, currentWindow: true}, function(array) {
 			// only one tab should be active in the current window
 			var activeTab = array[0];
@@ -192,6 +194,8 @@ chrome.windows.onFocusChanged.addListener(function(windowId) {
 				"start_time" : Date.now(),
 				"end_time" : 0
 			};
+			console.log("hi");
+			console.log(active);
 
 			xml.open("POST", "http://red-velvet-proto.herokuapp.com/chromeext", true);
 			xml.setRequestHeader("Content-type", "application/json");
@@ -206,6 +210,7 @@ chrome.windows.onFocusChanged.addListener(function(windowId) {
 			}
 			var parameters = JSON.stringify(data);
 			xml.send(parameters);
+			closed = 0;
 		})
 	}
 });
