@@ -34,6 +34,7 @@ exports.count = function(req, res) {
         for (var key in c) {
             d[d.length] = { site: key, count: c[key] };
         }
+        res.set('Access-Control-Allow-Origin', '*');
         res.send(d);
     });
 }
@@ -54,6 +55,7 @@ exports.totalTime = function(req, res) {
         for (var key in c) {
             d[d.length] = { site: key, total_time: c[key] };
         }
+        res.set('Access-Control-Allow-Origin', '*');
         res.send(d);
     });
 }
