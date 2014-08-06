@@ -39,6 +39,18 @@ app.get('/', function(req, res) {
         }
     });
 });
+
+app.get('/count', function(req, res) {
+    res.render('count', function(err, html) {
+        if (err) {
+            console.log(err);
+            res.status(500).send(err);
+        } else {
+            res.send(html);
+        }
+    });
+});
+
 app.get('/chromeext/average', Analysis.average);
 app.get('/chromeext/count', Analysis.count);
 app.get('/chromeext/total_time', Analysis.totalTime)
