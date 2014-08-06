@@ -24,7 +24,6 @@ exports.create = function(req, res){
 
 exports.show = function(req, res){
     // Is there a way to change the name to "url"?
-    console.log(req.params);
     ChromeModel.findOne({
         _id: req.params.chromeext
     }, function (err,chr) {
@@ -32,7 +31,6 @@ exports.show = function(req, res){
             res.status(500).send(err);
             return console.error(err);
         }
-        console.log("ChromeModel retrieved.\n" + chr + "\n");
         res.set('Access-Control-Allow-Origin', '*');
         res.send(chr);
     });
@@ -49,14 +47,13 @@ exports.update = function(req, res){
         }, {
             end_time: req.body.end_time
         }, function (err,chr) {
-            if (err) console.log(err);
-            console.log("ChromeModel updated.\n" + chr + "\n");
+            if (err) console.error(err);
             res.set('Access-Control-Allow-Origin', '*');
             res.send(chr);
         });
     } else {
         err = "ChromeModel.update: No end_time parameter found"
-        console.log(err);
+        console.error(err);
         res.status(500).send(err);
     }
 };

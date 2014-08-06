@@ -1,6 +1,7 @@
 var ChromeModel = require('./model');
 
-exports.average = function(url) {
+exports.average = function(req, res) {
+    var url = req.query.url;
     var total = 0;
     ChromeModel.find({
         url: { $regex: '^'+url }
@@ -16,21 +17,35 @@ exports.average = function(url) {
                 // is not recorded.
                 return prevSum;
         }, 0);
+        res.send({ "total_time": total });
     });
-    return total;
 }
 
-exports.count = function() {
+exports.count = function(req, res) {
     var c = {};
-    ChromeModel.find(true, function(err, res) {
-        console.log(res);
-        res.forEach(function(doc) {
+    var d = [];
+    ChromeModel.find(true, function(err, result) {
+        result.forEach(function(doc) {
             if (c[doc.url])
                 c[doc.url]++;
             else
                 c[doc.url] = 1;
         });
-        console.log(c);
+        res.send(c);
     });
-    return c;
+}
+
+exports.totalTime = function(req, res) {
+    var c = {}
+    ChromeModel.find(true, function(err, result) {
+        result.forEach(function(doc) {
+            diff = doc.end_time - doc.start_time;
+            if (doc.end_time )
+            if (c[doc.url])
+                c[doc.url] += diff;
+            else
+                c[doc.url] = diff;
+        });
+        res.send(c);
+    });
 }

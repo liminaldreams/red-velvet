@@ -15,10 +15,11 @@ var db_url = DATABASES.heroku;
 var app = express();
 var port = Number(process.env.PORT || 5000);
 app.settings['view engine'] = 'ejs';
-app.settings.views = process.cwd() + '/server/static/html'
+app.settings.views = process.cwd() + '/server/static/html';
 
 // Express Setup
 app.use(bodyParser.json());      // JSON parser
+app.use('/static', express.static('server/html'));
 
 // Database Setup
 mongoose.connect(db_url)
@@ -29,7 +30,7 @@ db.once('open', function () {
 });
 
 app.get('/', function(req, res) {
-    res.render('tabletest', function(err, html) {
+    res.render('simpletest', function(err, html) {
         if (err) {
             console.log(err);
             res.status(500).send(err);
@@ -38,12 +39,9 @@ app.get('/', function(req, res) {
         }
     });
 });
-app.get('/chromeext/average', function(req, res) {
-    res.send({ 'total_time': Analysis.average(req.query.url)});
-});
-app.get('/chromeext/count', function(req, res) {
-    res.send(Analysis.count());
-});
+app.get('/chromeext/average', Analysis.average);
+app.get('/chromeext/count', Analysis.count);
+app.get('/chromeext/total_time', Analysis.totalTime)
 app.resource('chromeext', require('./chromeext/api'));
 
 // Passport Setup, TODO to be worked on later.
