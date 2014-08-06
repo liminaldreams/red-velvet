@@ -69,10 +69,15 @@ d3.json("http://red-velvet-proto.herokuapp.com/chromeext/total_time", function(e
       .attr("class", "x axis")
       .call(yAxis)
     .append("text")
-      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - (margin.top /10))
+	        .attr("text-anchor", "middle")  
+	        .style("font-size", "16px") 
+	        .style("text-decoration", "underline")  
+	        .text("Breakdown of time spent on websites");
+      /*.attr("transform", "rotate(-90)")
       .attr("y", 6)
       .attr("dy", ".71em")
-      .style("text-anchor", "end")
+      .style("text-anchor", "end")*/
       // .text("Total Time");
 
   svg.selectAll(".bar")
