@@ -30,7 +30,7 @@ db.once('open', function () {
 });
 
 app.get('/', function(req, res) {
-    res.render('simpletest', function(err, html) {
+    res.render('barchart', function(err, html) {
         if (err) {
             console.log(err);
             res.status(500).send(err);
