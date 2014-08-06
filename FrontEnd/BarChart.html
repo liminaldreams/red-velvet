@@ -56,7 +56,7 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.json("http://red-velvet-proto.herokuapp.com/chromeext/total_time", type, function(error, data) {
+d3.json("http://red-velvet-proto.herokuapp.com/chromeext/total_time", function(error, data) {
   x.domain(data.map(function(i) { return i.site; }));
   y.domain([0, d3.max(data, function(i) { return i.total_time; })]);
 
@@ -86,9 +86,9 @@ d3.json("http://red-velvet-proto.herokuapp.com/chromeext/total_time", type, func
 
 });
 
-function type(i) {
-  i.total_time = +i.total_time;
-  return i;
-}
+// function type(i) {
+//   i.total_time = +i.total_time;
+//   return i;
+// }
 
 </script>

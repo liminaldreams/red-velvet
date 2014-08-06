@@ -31,21 +31,29 @@ exports.count = function(req, res) {
             else
                 c[doc.url] = 1;
         });
-        res.send(c);
+        for (var key in c) {
+            d[d.length] = { site: key, count: c[key] };
+        }
+        res.send(d);
     });
 }
 
 exports.totalTime = function(req, res) {
-    var c = {}
+    var c = {};
+    var d = [];
     ChromeModel.find(true, function(err, result) {
         result.forEach(function(doc) {
             diff = doc.end_time - doc.start_time;
-            if (doc.end_time )
-            if (c[doc.url])
-                c[doc.url] += diff;
-            else
-                c[doc.url] = diff;
+            if (doc.end_time > 0 && diff >= 0) {
+                if (c[doc.url])
+                    c[doc.url] += diff;
+                else
+                    c[doc.url] = diff;
+            }
         });
-        res.send(c);
+        for (var key in c) {
+            d[d.length] = { site: key, total_time: c[key] };
+        }
+        res.send(d);
     });
 }
